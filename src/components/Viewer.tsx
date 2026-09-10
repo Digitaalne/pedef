@@ -49,7 +49,10 @@ function PageView({ layout }: { layout: PageLayout }) {
       try {
         const page: PDFPageProxy = await doc.getPage(pageIndex + 1)
         if (cancelled) return
-        renderTaskRef.current = await renderPageToCanvas(page, canvasRef.current, layout, zoom)
+        // store the task before awaiting so cleanup can cancel an in-flight render
+        const task = renderPageToCanvas(page, canvasRef.current, zoom)
+        renderTaskRef.current = task
+        await task.promise
       } catch (e) {
         if (!cancelled && (e as { name?: string }).name !== 'RenderingCancelledException') {
           console.error(`Failed to render page ${pageIndex + 1}`, e)

@@ -53,19 +53,19 @@ export async function openPdf(file: File): Promise<LoadedPdf> {
   return { doc, fileName: file.name, bytes, pages }
 }
 
-export async function renderPageToCanvas(
+export function renderPageToCanvas(
   page: PDFPageProxy,
   canvas: HTMLCanvasElement,
-  layout: PageLayout,
   zoom: number,
-): Promise<RenderTask> {
+): RenderTask {
   const dpr = Math.min(window.devicePixelRatio || 1, 3)
   const viewport = page.getViewport({ scale: zoom * dpr })
-  canvas.width = Math.floor(viewport.width)
-  canvas.height = Math.floor(viewport.height)
-  canvas.style.width = `${Math.floor(layout.width * zoom)}px`
-  canvas.style.height = `${Math.floor(layout.height * zoom)}px`
-  const task = page.render({ canvas, canvasContext: canvas.getContext('2d')!, viewport })
-  await task.promise
-  return task
+  canvas.width = viewport.width
+  canvas.height = viewport.height
+  canvas.style.width = `${viewport.width / dpr}px`
+  canvas.style.height = `${viewport.height / dpr}px`
+  // Return the task immediately so callers can cancel an in-flight render;
+  // awaiting here would make cancellation a no-op and two render tasks would
+  // paint the same canvas concurrently, producing artifacts near glyphs.
+  return page.render({ canvas, canvasContext: canvas.getContext('2d')!, viewport })
 }
