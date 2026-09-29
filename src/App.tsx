@@ -105,11 +105,18 @@ export default function App() {
         return
       }
       if (e.key === '+' || e.key === '=') {
+        if (mod) e.preventDefault() // suppress browser zoom
         st.zoomIn()
         return
       }
       if (e.key === '-') {
+        if (mod) e.preventDefault()
         st.zoomOut()
+        return
+      }
+      if (mod && e.key === '0') {
+        e.preventDefault()
+        st.setZoom(1)
         return
       }
       if (st.selection && e.key.startsWith('Arrow')) {

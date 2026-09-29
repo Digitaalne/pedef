@@ -58,7 +58,9 @@ export function renderPageToCanvas(
   canvas: HTMLCanvasElement,
   zoom: number,
 ): RenderTask {
-  const dpr = Math.min(window.devicePixelRatio || 1, 3)
+  // Supersample: render at least 2x the CSS size so small text stays crisp
+  // on low-DPI screens; cap at 3x to bound canvas memory.
+  const dpr = Math.min(Math.max(window.devicePixelRatio || 1, 2), 3)
   const viewport = page.getViewport({ scale: zoom * dpr })
   canvas.width = viewport.width
   canvas.height = viewport.height

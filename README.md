@@ -13,7 +13,8 @@ rendered, modified, and downloaded locally and are **never uploaded** anywhere.
 - **Signature stamps**: draw with mouse/touch/stylus or type your name and
   pick a font + color, then save as a named stamp (kept in browser
   localStorage; available across sessions)
-- Multi-page, zoom, move/resize elements, undo/redo, keyboard nudge
+- Multi-page, zoom (buttons, `+`/`-`/`0`, or Ctrl/⌘+wheel around the cursor),
+  move/resize elements, undo/redo, keyboard nudge
 - **Download the edited PDF** at any time — pages left untouched stay exactly
   as they were
 - Handles pages with any `/Rotate` (0/90/180/270°) — placed content appears
